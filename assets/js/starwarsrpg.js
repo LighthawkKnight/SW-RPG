@@ -1,22 +1,24 @@
-const lightSide = ["Luke Skywalker", "Han Solo"];
-const darkSide = ["Darth Vader", "Stormtrooper"];
-
-// HP, Atk, Counter
-const luke = [500, 20, 30];
-const vader = [600, 10, 50];
-const han = [400, 50, 10];
-const trooper = [300, 40, 20];
+// Name, darkside, HP, Atk, Counter
+const luke = ["Luke Skywalker", false, 800, 20, 40];
+const vader = ["Darth Vader", true, 1000, 10, 50];
+const boba = ["Boba Fett", true, 500, 30, 30]
 
 class Combatant {
 
-    constructor(hp = 9999, atk = 999, ctr = 999) {
-        // this.name = name;
-        // this.aff = aff;
-        // this.thumb = thumb;
+    constructor(name = "Yoda", dark = false, hp = 9999, atk = 999, ctr = 999) {
+        this.name = name;
+        this.dark = dark;
         this.hp = hp;
         this.atk = atk;
         this.ctr = ctr;
     }
+
+    changeHP(element) {
+        if (this.hp <= 0)
+            this.hp = 0
+        $(element).html(" " + this.hp);
+    }
+
 }
 
 // main
@@ -46,24 +48,27 @@ class Combatant {
 
 // get char chosen, maybe a switch case
 var char = luke;
-
-var player = new Combatant(char[0], char[1], char[2])
+var player = new Combatant(char[0], char[1], char[2], char[3], char[4])
 
 // pick random enemy
 var oppt = vader;
-
-var enemy = new Combatant(oppt[0], oppt[2], oppt[3]);
+var enemy = new Combatant(oppt[0], oppt[1], oppt[2], oppt[3], oppt[4]);
 
 $('#atkButton').click(function() {
     enemy.hp -= player.atk;
-    player.hp -= enemy.atk;
-    if (enemy.hp <= 0) {
+    player.hp -= enemy.ctr;
+    player.changeHP("'#playerHP'");
+    enemy.changeHP("'#activeHP'");
+
+    if (player.hp <= 0) {
+        // game over
+    }
+    else if (enemy.hp <= 0) {
         // remove defender, player choose new;
         // if no enemies
             // win
     }
     else {
-        player.hp -= enemy.ctr;
         if (player.hp <= 0) {
             //lose
         }
