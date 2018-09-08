@@ -9,7 +9,67 @@
     <script src="jquery-3.3.1.min.js"></script>
     <title>Star Wars RPG</title>
 </head>
+
+<!--
+Elements used
+
+#atkBtnElement - for attack button
+
+-->
+
 <body>
-    
+
+<div class = "container">
+    <div id = "title" class = "header text-center">Star Wars RPG</div>
+    <div class = "row">
+        Your Character
+    </div>
+    <div class = "row">
+        <div class = "card">
+            <img id = "player" class = "card-img-top" src = "assets/img/luke.bmp" alt = "Luke Skywalker">
+            <p id = "playerStats" class = "card-text text-center">
+                <span id = "playerName">Luke Skywalker</span><br>
+                HP: <span id = "playerHP"></span><br>
+                Atk: <span id = "playerAtk"></span><br>
+                Ctr: <span id = "playerCtr"></span>
+            </p>
+        </div>
+    </div>
+    <div class = "row">
+        Defender Area:
+    </div>
+    <div class = "row">
+        <div class = "card">
+            <img id = "active" class = "card-img-top" src = "assets/img/vader.bmp" alt = "Darth Vader">
+            <p id = "activeStats" class = "card-text text-center">
+                <span id = "activeName">Darth Vader</span><br>
+                HP: <span id = "activeHP"></span><br>
+                Atk: <span id = "activeAtk"></span><br>
+                Ctr: <span id = "activeCtr"></span>
+            </p>
+        </div>          
+    </div>
+    <div class = "row">
+        Remaining Opponents:
+    </div>
+    <div class = "row">
+        <div class = "card">
+            <img id = "enemy1" class = "card-img-top" src = "assets/img/boba.bmp" alt = "Darth Vader">
+            <p id = "enemyStats" class = "card-text text-center">
+                <span id = "enemyName">Boba Fett</span><br>
+                HP: <span id = "enemyHP"></span><br>
+                Atk: <span id = "enemyAtk"></span><br>
+                Ctr: <span id = "enemyCtr"></span>
+            </p>
+        </div>
+    </div>
+    <div class = "row">
+        <button id = "atkButton"></button>
+    </div>
+</div>
+
+
+<script src="assets/js/hangman.js"></script>
+
 </body>
 </html>

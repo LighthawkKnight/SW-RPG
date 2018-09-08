@@ -12,6 +12,7 @@ class Combatant {
     constructor(hp = 9999, atk = 999, ctr = 999) {
         // this.name = name;
         // this.aff = aff;
+        // this.thumb = thumb;
         this.hp = hp;
         this.atk = atk;
         this.ctr = ctr;
@@ -53,8 +54,9 @@ var oppt = vader;
 
 var enemy = new Combatant(oppt[0], oppt[2], oppt[3]);
 
-$('element').click(function() {
+$('#atkButton').click(function() {
     enemy.hp -= player.atk;
+    player.hp -= enemy.atk;
     if (enemy.hp <= 0) {
         // remove defender, player choose new;
         // if no enemies
