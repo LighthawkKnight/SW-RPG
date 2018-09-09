@@ -1,7 +1,8 @@
 // Name, darkside, HP, Atk, Counter
 const luke = ["Luke Skywalker", false, 800, 20, 40];
+const han = ["Han Solo", false, 600, 40, 20]
 const vader = ["Darth Vader", true, 1000, 10, 50];
-const boba = ["Boba Fett", true, 500, 30, 30]
+const boba = ["Boba Fett", true, 600, 30, 30]
 
 class Combatant {
 
@@ -53,6 +54,12 @@ var player = new Combatant(char[0], char[1], char[2], char[3], char[4])
 // pick random enemy
 var oppt = vader;
 var enemy = new Combatant(oppt[0], oppt[1], oppt[2], oppt[3], oppt[4]);
+
+$('#startButton').click(function(){
+    // initialize game
+
+});
+
 
 $('#atkButton').click(function() {
     enemy.hp -= player.atk;
