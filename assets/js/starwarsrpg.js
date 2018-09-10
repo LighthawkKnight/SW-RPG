@@ -21,7 +21,7 @@ class Combatant {
         this.alive = true;
     }
 
-    displayCard(element, pos) {
+    displayCard(element, pos = "") {
         $("#"+element+pos+"Img").attr('src', this.img);
         $("#"+element+pos+"Img").attr('alt', this.name);
         $("#"+element+pos+"Name").html(this.name);
@@ -31,12 +31,12 @@ class Combatant {
         $("#"+element+pos).show();
     }
 
-    changeHP(element, pos) {
+    changeHP(element, pos = "") {
         if (this.hp <= 0) {
             this.hp = 0
             this.alive = false;
         }
-        $("#"+element+pos+"Atk").html(" " + this.hp);
+        $("#"+element+pos+"HP").html(" " + this.hp);
     }
 
     
@@ -111,7 +111,7 @@ function start(){
         }
 
         player.displayCard("player", 1);    // Change first card to character selected
-        $('#playerCards').unbind("click");      // Make all character select cards unclickable
+        $('#playerCards').off("click");      // Make all character select cards unclickable
         $('#player1').css("cursor", "auto");    // Reset cursor for player card
         $('#player1').removeClass('pselect');  // Remove hover border
         for (var i = 2; i <= char.length; i++) {  // Hide all other cards
@@ -119,14 +119,12 @@ function start(){
             $("#player"+i).hide();
         }
         //Generate enemy cards
-        for (var i = 0; i < reserve.length; i++) {
-            reserve[i].displayCard("enemy", i+1);
-            $('#enemy'+i).addClass('alive');
+        for (var i = 1; i <= reserve.length; i++) {
+            reserve[i-1].displayCard("reserve", i);
+            $('#reserve'+i).addClass('alive');
         }
-
-
+        
         selectEnemy();
-
     });    
 
 }//);
@@ -134,38 +132,43 @@ function start(){
 function selectEnemy(){
     
     for (var i = 1; i <= reserve.length; i++)
-        if (reserve[i].alive) {
-            $('#enemy'+i).addClass('eselect');
-            $('#enemy'+i).css("cursor", "pointer");
+        if (reserve[i-1].alive) {
+            $('#reserve'+i).addClass('eselect');
+            $('#reserve'+i).css("cursor", "pointer");
         }
-        else
-            $('#enemy'+i).unbind("click");
+        else {
+            $('#reserve'+i).removeClass('alive');  // might repeat somewhere later
+            $('#reserve'+i).off("click");
+        }
 
-    $('#enemy3').removeClass('alive');
-
-    $("#enemyCards").on("click", ".alive", function() {
-        alert("test");
+    $("#reserveCards").on("click", ".alive", function() {
+        $(this).hide();
+        var id = $(this).attr('id');
+        for (var i = 1; i <= reserve.length; i++) {
+            if (reserve[i-1].name == $('#'+id+"Name").html()) {
+                enemy = reserve[i-1];
+            }
+            $('#reserve'+i).removeClass('eselect');
+            $('#reserve'+i).css("cursor", "auto");
+        }
+        $("#reserveCards").off("click");
+        enemy.displayCard("enemy");
     });
-
-
 }
 
 
 
 
 start();
-selectEnemy();
 
-
-$
 
 $('#atkButton').click(function() {
     enemy.hp -= player.atk;
     player.hp -= enemy.ctr;
-    player.changeHP("player");
-    enemy.changeHP("active");
+    player.changeHP("player", 1);
+    enemy.changeHP("enemy");
     player.atk += atkIncr;
-    $('#playerAtk').html(" " + player.atk);
+    $('#player1Atk').html(" " + player.atk);
 
     if (player.hp <= 0) {
 
