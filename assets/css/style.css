@@ -7,6 +7,15 @@ body {
     width: 10rem;
     height: 100%;
     background-color: black;
+    margin-right: 30px;
+}
+
+.pselect:hover  {
+    border: 2px solid rgb(12, 177, 12);
+}
+
+.eselect:hover {
+    border: 2px solid red;
 }
 
 .card-img-top {
