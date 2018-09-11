@@ -14,6 +14,11 @@ body {
     border: 2px solid rgb(12, 177, 12);
 }
 
+.dead {
+    background-color: black;
+    opacity: 0.5;
+}
+
 .eselect:hover {
     border: 2px solid red;
 }

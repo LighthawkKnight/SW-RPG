@@ -36,6 +36,10 @@ class Combatant {
             this.hp = 0
             this.alive = false;
         }
+
+        if (element == "enemy")
+            $('#'+selectedId+"HP").html(" " + this.hp);
+
         $("#"+element+pos+"HP").html(" " + this.hp);
     }
 
@@ -74,11 +78,19 @@ var boba = new Combatant(Boba[0], Boba[1], Boba[2], Boba[3], Boba[4], Boba[5]);
 var char = [luke, han, vader, boba]
 var player;
 var enemy;
+var selectedEnemy;
+var selectedId;
 var reserve = [];
+
 
 // $('#startButton').click(function(){
 function start(){
     // Displays all character card objects for player to select
+    $('#playerCards').show();
+    $('#enemy').hide();
+    $('#reserveCards').hide();
+    $('#player1Img').removeClass('dead');
+    $('#enemyImg').removeClass('dead');
     for (var i = 1; i <= char.length; i++) {
         char[i-1].displayCard("player",i);
         $("#player"+i).addClass('pselect');
@@ -122,8 +134,9 @@ function start(){
         for (var i = 1; i <= reserve.length; i++) {
             reserve[i-1].displayCard("reserve", i);
             $('#reserve'+i).addClass('alive');
+            $('#reserve'+i+"Img").removeClass('dead');
         }
-        
+        $('#reserveCards').show();
         selectEnemy();
     });    
 
@@ -138,14 +151,17 @@ function selectEnemy(){
         }
         else {
             $('#reserve'+i).removeClass('alive');  // might repeat somewhere later
+            $('#reserve'+i+"Img").addClass('dead');
             $('#reserve'+i).off("click");
+            // fade
         }
 
     $("#reserveCards").on("click", ".alive", function() {
         $(this).hide();
-        var id = $(this).attr('id');
+        selectedEnemy = $(this);
+        selectedId = $(this).attr('id');
         for (var i = 1; i <= reserve.length; i++) {
-            if (reserve[i-1].name == $('#'+id+"Name").html()) {
+            if (reserve[i-1].name == $('#'+selectedId+"Name").html()) {
                 enemy = reserve[i-1];
             }
             $('#reserve'+i).removeClass('eselect');
@@ -176,9 +192,9 @@ $('#atkButton').click(function() {
     }
     else if (enemy.hp <= 0) {
         
-        // remove defender, player choose new;
-        // if no enemies
-            // win
+        $('#enemy').hide();
+        selectedEnemy.show();
+        selectEnemy();
     }
     else {
         if (player.hp <= 0) {
