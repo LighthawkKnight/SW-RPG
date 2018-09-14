@@ -1,10 +1,10 @@
 const iPath = "assets/img/"
 
 // Name, darkside, HP, Atk, Counter, Portrait
-const Luke = ["Luke Skywalker", false, 800, 20, 40, iPath+"luke.bmp"];
-const Han = ["Han Solo", false, 600, 40, 20, iPath+"han.bmp"]
+const Luke = ["Luke Skywalker", false, 900, 20, 40, iPath+"luke.bmp"];
+const Han = ["Han Solo", false, 600, 50, 20, iPath+"han.bmp"]
 const Vader = ["Darth Vader", true, 1000, 10, 50, iPath+"vader.bmp"];
-const Boba = ["Boba Fett", true, 600, 30, 30, iPath+"boba.bmp"]
+const Boba = ["Boba Fett", true, 700, 30, 30, iPath+"boba.bmp"]
 
 // Attack power increase per attack
 const atkIncr = 5;
@@ -19,6 +19,8 @@ class Combatant {
         this.ctr = ctr;
         this.img = img;
         this.alive = true;
+        this.initHP = hp;
+        this.initAtk = atk;
     }
 
     displayCard(element, pos = "") {
@@ -81,21 +83,32 @@ var enemy;
 var selectedEnemy;
 var selectedId;
 var reserve = [];
+var defeated = 0;
 
 
-// $('#startButton').click(function(){
-function start(){
+$('#startButton').click(function() {
     // Displays all character card objects for player to select
+    $('#startButton').html("Restart");
     $('#playerCards').show();
     $('#enemy').hide();
     $('#reserveCards').hide();
+    $('#combatLog1').html("Select your character.");
+    $('#combatLog2').empty();
+    $('#combatLog3').empty();
     $('#player1Img').removeClass('dead');
     $('#enemyImg').removeClass('dead');
+
     for (var i = 1; i <= char.length; i++) {
+        char[i-1].hp = char[i-1].initHP;
+        char[i-1].atk = char[i-1].initAtk;
+        char[i-1].alive = true;
         char[i-1].displayCard("player",i);
         $("#player"+i).addClass('pselect');
         $("#player"+i).css('cursor', 'pointer');
+        $('#player'+i+'Img').removeClass('dead');
     }
+
+    reserve = [];
 
     $("#playerCards").on("click", ".card", function() {
         switch($(this).attr('id')) {
@@ -134,13 +147,14 @@ function start(){
         for (var i = 1; i <= reserve.length; i++) {
             reserve[i-1].displayCard("reserve", i);
             $('#reserve'+i).addClass('alive');
-            $('#reserve'+i+"Img").removeClass('dead');
+            $('#reserve'+i+'Img').removeClass('dead');
         }
         $('#reserveCards').show();
+        defeated = 0;
         selectEnemy();
     });    
 
-}//);
+});
 
 function selectEnemy(){
     
@@ -153,8 +167,12 @@ function selectEnemy(){
             $('#reserve'+i).removeClass('alive');  // might repeat somewhere later
             $('#reserve'+i+"Img").addClass('dead');
             $('#reserve'+i).off("click");
-            // fade
         }
+    $('#atkButton').prop("disabled", true);
+    if (defeated != 0)
+        $('#combatLog3').append("Choose your next opponent.")
+    else
+        $('#combatLog1').html("Select your first oppoenent.")
 
     $("#reserveCards").on("click", ".alive", function() {
         $(this).hide();
@@ -169,37 +187,44 @@ function selectEnemy(){
         }
         $("#reserveCards").off("click");
         enemy.displayCard("enemy");
+        $('#atkButton').prop("disabled", false);
+        $('#combatLog1').empty();
+        $('#combatLog2').empty();
+        $('#combatLog3').empty();
     });
 }
-
-
-
-
-start();
-
 
 $('#atkButton').click(function() {
     enemy.hp -= player.atk;
     player.hp -= enemy.ctr;
     player.changeHP("player", 1);
     enemy.changeHP("enemy");
+    $('#combatLog1').html(player.name + " hits " + enemy.name + " for " + player.atk + " damage!");
+    $('#combatLog2').html(enemy.name + " hits " + player.name + " for " + enemy.ctr + " damage!");
     player.atk += atkIncr;
     $('#player1Atk').html(" " + player.atk);
 
     if (player.hp <= 0) {
-
-        // game over
+        $('#player1Img').addClass('dead');
+        $('#combatLog3').append(player.name + ' was defeated!<br>You lose!');
+        $('#atkButton').prop("disabled", true);
     }
     else if (enemy.hp <= 0) {
-        
-        $('#enemy').hide();
-        selectedEnemy.show();
-        selectEnemy();
-    }
-    else {
-        if (player.hp <= 0) {
-            //lose
+        $('#combatLog3').html("You have defeated " + enemy.name + "!<br>");
+        defeated++;
+        if (defeated < reserve.length) {
+            $('#enemy').hide();
+            selectedEnemy.show();
+            selectEnemy();
         }
+        else {
+            $('#combatLog3').append("You've defeated all opponents.  You win!")
+            $('#atkButton').prop("disabled", true);
+        }
+            
     }
 });
 
+$('#playerCards').hide();
+$('#enemy').hide();
+$('#reserveCards').hide();
