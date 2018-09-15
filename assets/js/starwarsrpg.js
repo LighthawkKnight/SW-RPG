@@ -1,13 +1,14 @@
-const iPath = "assets/img/"
-
 // Name, darkside, HP, Atk, Counter, Portrait
-const Luke = ["Luke Skywalker", false, 900, 20, 40, iPath+"luke.bmp"];
-const Han = ["Han Solo", false, 600, 50, 20, iPath+"han.bmp"]
-const Vader = ["Darth Vader", true, 1000, 10, 50, iPath+"vader.bmp"];
-const Boba = ["Boba Fett", true, 700, 30, 30, iPath+"boba.bmp"]
+const Luke = ["Luke Skywalker", false, 2800, 20, 80, "assets/img/luke.bmp"];
+const Han = ["Han Solo", false, 2200, 70, 30, "assets/img/han.bmp"];
+const Yoda = ["Yoda", false, 3000, 10, 90, "assets/img/yoda2.bmp" ];
+const Vader = ["Darth Vader", true, 2500, 40, 60, "assets/img/vader.bmp"];
+const Boba = ["Boba Fett", true, 2100, 80, 20, "assets/img/boba.bmp"];
+const Emp = ["Emeperor Palpatine", true, 1450, 500, 10, "assets/img/emp.bmp"];
+
 
 // Attack power increase per attack
-const atkIncr = 5;
+const atkIncr = 10;
 
 class Combatant {
 
@@ -74,10 +75,12 @@ class Combatant {
 */
 
 var luke = new Combatant(Luke[0], Luke[1], Luke[2], Luke[3], Luke[4], Luke[5])
-var vader = new Combatant(Vader[0], Vader[1], Vader[2], Vader[3], Vader[4], Vader[5]);
 var han = new Combatant(Han[0], Han[1], Han[2],Han[3], Han[4], Han[5]);
+var yoda = new Combatant(Yoda[0], Yoda[1], Yoda[2], Yoda[3], Yoda[4], Yoda[5]);
+var vader = new Combatant(Vader[0], Vader[1], Vader[2], Vader[3], Vader[4], Vader[5]);
 var boba = new Combatant(Boba[0], Boba[1], Boba[2], Boba[3], Boba[4], Boba[5]);
-var char = [luke, han, vader, boba]
+var emp = new Combatant(Emp[0], Emp[1], Emp[2], Emp[3], Emp[4], Emp[5]);
+var char = [luke, han, yoda, vader, boba, emp]
 var player;
 var enemy;
 var selectedEnemy;
@@ -120,14 +123,22 @@ $('#startButton').click(function() {
                 player = char[1];
                 pushEnemy(1);
                 break;
-            case "player3":     // Vader
+            case "player3":     // Yoda
                 player = char[2];
                 pushEnemy(2);
                 break;
-            case "player4":     // Boba Fett
+            case "player4":     // Vader
                 player = char[3];
                 pushEnemy(3);
-                break;               
+                break;
+            case "player5":     // Boba Fett
+                player = char[4];
+                pushEnemy(4);
+                break;
+            case "player6":     // Emperor
+                player = char[5];
+                pushEnemy(5);
+                break;     
             function pushEnemy(player) {
                 for (var i = 0; i < char.length; i++)
                     if (i != player)
@@ -206,11 +217,11 @@ $('#atkButton').click(function() {
 
     if (player.hp <= 0) {
         $('#player1Img').addClass('dead');
-        $('#combatLog3').append(player.name + ' was defeated!<br>You lose!');
+        $('#combatLog3').append(enemy.name + " has defeated " + player.name + "!<br>You lose!");
         $('#atkButton').prop("disabled", true);
     }
     else if (enemy.hp <= 0) {
-        $('#combatLog3').html("You have defeated " + enemy.name + "!<br>");
+        $('#combatLog3').html(player.name + " has defeated " + enemy.name + "!<br>");
         defeated++;
         if (defeated < reserve.length) {
             $('#enemy').hide();
